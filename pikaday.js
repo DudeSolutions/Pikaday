@@ -1,3 +1,4 @@
+
 /*!
  * Pikaday
  *
@@ -253,7 +254,8 @@
         onSelect: null,
         onOpen: null,
         onClose: null,
-        onDraw: null
+        onDraw: null,
+        onInvalid: null
     },
 
 
@@ -459,6 +461,8 @@
             if (e.firedBy === self) {
                 return;
             }
+            //Changing this to false so that we dont use moment
+            //Since it tranlates a year of 16 to 0016, js date will change it to 2016
             if (hasMoment) {
                 date = moment(opts.field.value, opts.format);
                 date = (date && date.isValid()) ? date.toDate() : null;
@@ -467,7 +471,16 @@
                 date = new Date(Date.parse(opts.field.value));
             }
             if (isDate(date)) {
-              self.setDate(date)
+                self.setDate(date);
+            } else {
+                if (date == null || date == '') {
+                    self.setDate(null);
+                } else {
+                    if (opts.onInvalid) {
+                        opts.onInvalid(date);
+                    }
+                }
+               
             }
             if (!self._v) {
                 self.show();
@@ -531,7 +544,7 @@
         self.el = document.createElement('div');
         self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '') + (opts.theme ? ' ' + opts.theme : '');
 
-        addEvent(self.el, 'ontouchend' in document ? 'touchend' : 'mousedown', self._onMouseDown, true);
+        addEvent(self.el, 'mousedown', self._onMouseDown, true);
         addEvent(self.el, 'change', self._onChange);
 
         if (opts.field) {
@@ -684,6 +697,7 @@
         setDate: function(date, preventOnSelect)
         {
             if (!date) {
+               
                 this._d = null;
 
                 if (this._o.field) {
@@ -877,19 +891,13 @@
 
         adjustPosition: function()
         {
-            var field, pEl, width, height, viewportWidth, viewportHeight, scrollTop, left, top, clientRect;
-            
             if (this._o.container) return;
-            
-            this.el.style.position = 'absolute';
-            
-            field = this._o.trigger;
-            pEl = field;
-            width = this.el.offsetWidth;
-            height = this.el.offsetHeight;
-            viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-            viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop;
+            var field = this._o.trigger, pEl = field,
+            width = this.el.offsetWidth, height = this.el.offsetHeight,
+            viewportWidth = window.innerWidth || document.documentElement.clientWidth,
+            viewportHeight = window.innerHeight || document.documentElement.clientHeight,
+            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop,
+            left, top, clientRect;
 
             if (typeof field.getBoundingClientRect === 'function') {
                 clientRect = field.getBoundingClientRect();
@@ -922,6 +930,7 @@
                 top = top - height - field.offsetHeight;
             }
 
+            this.el.style.position = 'absolute';
             this.el.style.left = left + 'px';
             this.el.style.top = top + 'px';
         },
@@ -1003,7 +1012,6 @@
                 if (this._o.bound) {
                     removeEvent(document, 'click', this._onClick);
                 }
-                this.el.style.position = 'static'; // reset
                 this.el.style.left = 'auto';
                 this.el.style.top = 'auto';
                 addClass(this.el, 'is-hidden');
