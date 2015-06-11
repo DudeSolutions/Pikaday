@@ -458,9 +458,9 @@
         {
             var date;
 
-            if (e.firedBy === self) {
+            if (e.firedBy === self){
                 return;
-            
+            }
             if (hasMoment) {
                 date = moment(opts.field.value, opts.format);
                 date = (date && date.isValid()) ? date.toDate() : null;
@@ -471,7 +471,7 @@
             if (isDate(date)) {
                 self.setDate(date);
             } else {
-                if (date == null || date == '') {
+                if (date == null || date === '') {
                     self.setDate(null);
                 } else {
                     if (opts.onInvalid) {
@@ -633,7 +633,7 @@
                 opts.maxDate = opts.minDate = false;
             }
             if (opts.minDate) {
-                this.setMinDate(opts.minDate)
+                this.setMinDate(opts.minDate);
             }
             if (opts.maxDate) {
                 setToStartOfDay(opts.maxDate);
