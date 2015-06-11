@@ -460,9 +460,7 @@
 
             if (e.firedBy === self) {
                 return;
-            }
-            //Changing this to false so that we dont use moment
-            //Since it tranlates a year of 16 to 0016, js date will change it to 2016
+            
             if (hasMoment) {
                 date = moment(opts.field.value, opts.format);
                 date = (date && date.isValid()) ? date.toDate() : null;
