@@ -478,7 +478,7 @@
                         opts.onInvalid(date);
                     }
                 }
-               
+
             }
             if (!self._v) {
                 self.show();
@@ -695,7 +695,7 @@
         setDate: function(date, preventOnSelect)
         {
             if (!date) {
-               
+
                 this._d = null;
 
                 if (this._o.field) {
@@ -710,15 +710,6 @@
             }
             if (!isDate(date)) {
                 return;
-            }
-
-            var min = this._o.minDate,
-                max = this._o.maxDate;
-
-            if (isDate(min) && date < min) {
-                date = min;
-            } else if (isDate(max) && date > max) {
-                date = max;
             }
 
             this._d = new Date(date.getTime());
