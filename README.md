@@ -101,6 +101,7 @@ Pikaday has many useful options:
 * `onOpen` callback function for when the picker becomes visible
 * `onClose` callback function for when the picker is hidden
 * `onDraw` callback function for when the picker draws a new month
+* `onInvalid` callback function for when the picker is set to invalid date
 
 ## jQuery Plugin
 
