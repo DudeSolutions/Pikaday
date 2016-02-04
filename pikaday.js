@@ -712,6 +712,15 @@
                 return;
             }
 
+            var min = this._o.minDate,
+                max = this._o.maxDate;
+
+            if (isDate(min) && date < min) {
+                date = min;
+            } else if (isDate(max) && date > max) {
+                date = max;
+            }
+
             this._d = new Date(date.getTime());
             setToStartOfDay(this._d);
             this.gotoDate(this._d);
